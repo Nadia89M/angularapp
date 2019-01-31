@@ -1,0 +1,41 @@
+<button class="btn btn-dark mb-3" (click)="showUserForm = !showUserForm">Add User</button>
+<div *ngIf = "showUserForm" class="card card-body mb-3">
+  <h2>Add User</h2>
+  <form #userFrom = "ngForm" (ngSubmit)="onSubmit(userForm)">
+    <div class="form-group">
+      <label>First Name</label> 
+      <input type="text" class="form-control" name="firstName" [(ngModel)]="user.firstName">
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastName" [(ngModel)]="user.lastName">
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" [(ngModel)]="user.email">
+    </div>
+
+    <button [disabled] = "user.firstName == '' || user.lastName == '' "  class="btn btn-block mb-3">Add New User</button>
+  </form>
+</div>
+<ul *ngIf = "loaded && users?.length > 0" class="list-unstyled">
+  <li 
+  *ngFor = 'let user of users' 
+  class="card card-body mb-2" 
+  [class.bg-light]="user.isActive"
+  >
+
+    <h3>{{ user.firstName }} {{ user.lastName }}<small><button (click)="user.hide = !user.hide" class= "btn btn-dark btn-sm ml-2"> <i [ngClass]="user.hide ? 'fas fa-plus' : 'fas fa-minus'"></i> </button> </small></h3>
+    <ul *ngIf="!user.hide" class="list-group">
+        <li class="list-group-item">
+            Email: {{ user.email}}
+        </li>
+      <li class="list-group-item">
+          Joined: {{ user.registered | date: 'fullDate'}}
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 *ngIf="users?.length == 0">No Users Found</h4>
+<h4 *ngIf="!loaded">Loading Users...</h4>
